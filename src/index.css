@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-smit-blue: #00509D;
+  --color-smit-green: #8DC63F;
+  --color-smit-dark: #1E293B;
+  
+  --font-sans: "Inter", "system-ui", "Avenir", "Helvetica", "Arial", "sans-serif";
+  --font-outfit: "Outfit", "sans-serif";
+}
+
+@layer base {
+  :root {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    font-weight: 400;
+    color-scheme: light dark;
+    background-color: #f8fafc;
+    color: #1e293b;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    background: #ffffff;
+    @apply antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .smit-gradient {
+    @apply bg-gradient-to-r from-smit-blue to-[#003B75];
+  }
+
+  .btn-primary {
+    @apply px-6 py-2 rounded-full bg-smit-blue text-white font-medium hover:bg-[#003B75] transition-all duration-300 shadow-md hover:shadow-lg active:scale-95;
+  }
+
+  .btn-outline {
+    @apply px-6 py-2 rounded-full border-2 border-smit-blue text-smit-blue font-medium hover:bg-smit-blue hover:text-white transition-all duration-300 active:scale-95;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl rounded-2xl;
+  }
+}
