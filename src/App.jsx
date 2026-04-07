@@ -19,13 +19,13 @@ import Courses from './pages/Courses';
 import Leaves from './pages/Leaves';
 
 // Admin Pages
-import AdminLogin from './pages/admin/AdminLogin';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminStudents from './pages/admin/AdminStudents';
-import AdminCourses from './pages/admin/AdminCourses';
-import AdminLeaves from './pages/admin/AdminLeaves';
-import AdminAddAdmin from './pages/admin/AdminAddAdmin';         // ✅ NEW
-import AdminResetPassword from './pages/admin/AdminResetPassword'; // ✅ NEW
+import AdminLogin from './pages/Admin/AdminLogin';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import AdminStudents from './pages/Admin/AdminStudents';
+import AdminCourses from './pages/Admin/AdminCourses';
+import AdminLeaves from './pages/Admin/AdminLeaves';
+import AdminAddAdmin from './pages/Admin/AdminAddAdmin';
+import AdminResetPassword from './pages/Admin/AdminResetPassword';
 
 function App() {
   const dispatch = useDispatch();

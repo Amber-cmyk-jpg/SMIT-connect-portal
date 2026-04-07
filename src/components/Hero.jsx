@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ChevronRight, PlayCircle, Star, Users, Briefcase } from 'lucide-react';
 import { motion } from 'framer-motion';
+import heroMain from '../assets/hero_main.png';
 
 const Hero = () => {
   return (
@@ -38,19 +40,23 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start items-center">
-              <button className="group relative bg-smit-blue hover:bg-[#003B75] text-white px-10 py-5 rounded-full text-lg font-bold transition-all shadow-2xl shadow-smit-blue/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden">
-                <span className="relative z-10 flex items-center gap-2">
-                  Enroll Now <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                </span>
-                <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </button>
+              <Link to="/signup">
+                <button className="group relative bg-smit-blue hover:bg-[#003B75] text-white px-10 py-5 rounded-full text-lg font-bold transition-all shadow-2xl shadow-smit-blue/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden">
+                  <span className="relative z-10 flex items-center gap-2">
+                    Enroll Now <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+              </Link>
               
-              <button className="flex items-center gap-3 text-[#0f172a] hover:text-smit-blue font-bold text-lg transition-colors group">
-                <div className="p-3 bg-white border border-slate-100 rounded-full shadow-md group-hover:shadow-lg transition-all group-hover:text-smit-blue">
-                  <PlayCircle size={24} />
-                </div>
-                Learn More
-              </button>
+              <Link to="/courses">
+                <button className="flex items-center gap-3 text-[#0f172a] hover:text-smit-blue font-bold text-lg transition-colors group">
+                  <div className="p-3 bg-white border border-slate-100 rounded-full shadow-md group-hover:shadow-lg transition-all group-hover:text-smit-blue">
+                    <PlayCircle size={24} />
+                  </div>
+                  Learn More
+                </button>
+              </Link>
             </div>
 
             <div className="mt-16 flex flex-wrap justify-center lg:justify-start gap-8 border-t border-slate-100 pt-10">
@@ -92,13 +98,13 @@ const Hero = () => {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.25)] border-8 border-white/30 backdrop-blur-sm">
                <img 
-                 src="https://img.freepik.com/free-photo/diverse-students-working-together-class_23-2149174154.jpg?t=st=1712310000~exp=1712313600~hmac=..." 
+                 src={heroMain} 
                  alt="Students learning at SMIT" 
                  className="w-full h-auto aspect-[4/3] object-cover"
                />
                <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a]/60 flex items-end p-8">
                   <div className="text-white">
-                    <div className="font-bold text-xl mb-1">Web Development Cohort</div>
+                    <div className="font-bold text-xl mb-1">Web Development Cohort 2026</div>
                     <div className="text-slate-200">Karachi Head Office Campus</div>
                   </div>
                </div>
@@ -116,7 +122,7 @@ const Hero = () => {
                   </div>
                   <div>
                     <div className="font-bold text-slate-900">Admissions Open</div>
-                    <div className="text-sm text-slate-500">Apply before 20th Oct</div>
+                    <div className="text-sm text-slate-500">Apply before 20th May</div>
                   </div>
                </div>
             </motion.div>

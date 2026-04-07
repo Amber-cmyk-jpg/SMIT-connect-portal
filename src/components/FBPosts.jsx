@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, MessageCircle, Share2 } from 'lucide-react';
-import { Share } from 'lucide-react';
+import { Share, Heart, MessageCircle, Share2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import admissionsImg from '../assets/admissions_2026.png';
+import aiCourseImg from '../assets/ai_ml_course.png';
+import successStoryImg from '../assets/student_success_stories.png';
 
 const FBPosts = () => {
   const [posts, setPosts] = useState([]);
@@ -12,21 +14,21 @@ const FBPosts = () => {
     const demoPosts = [
       {
         id: 1,
-        message: "🎉 Admissions Open for Web & Mobile Development Batch 2025! Last 50 seats remaining. Apply now at smitconnect.com/courses",
+        message: "🎉 Admissions Open for Web & Mobile Development Batch 2026! Last 50 seats remaining. Apply now at smitconnect.com/courses",
         created_time: "2 hours ago",
         reactions: 247,
         comments: 45,
         shares: 23,
-        image: "https://images.unsplash.com/photo-1516321310764-9f3c226bc948?w=500"
+        image: admissionsImg
       },
       {
         id: 2,
-        message: "💻 New AI/ML course starting January. 100% Free training by industry experts. Diploma certified.",
+        message: "💻 New AI/ML course starting next month. 100% Free training by industry experts. Diploma certified.",
         created_time: "1 day ago",
         reactions: 389,
         comments: 67,
         shares: 41,
-        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500"
+        image: aiCourseImg
       },
       {
         id: 3,
@@ -35,7 +37,7 @@ const FBPosts = () => {
         reactions: 612,
         comments: 89,
         shares: 156,
-        image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=500"
+        image: successStoryImg
       }
     ];
     

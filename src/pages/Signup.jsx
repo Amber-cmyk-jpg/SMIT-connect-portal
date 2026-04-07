@@ -150,7 +150,7 @@ const Signup = () => {
                       type="text"
                       required
                       className="block w-full pl-12 pr-6 py-4 bg-slate-50 border border-slate-200 rounded-3xl text-slate-900 font-bold placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-smit-blue/10 focus:border-smit-blue/30 transition-all text-lg"
-                      placeholder="SMIT-2024-001"
+                      placeholder="SMIT-2026-001"
                       value={formData.rollNo}
                       onChange={handleChange}
                     />
