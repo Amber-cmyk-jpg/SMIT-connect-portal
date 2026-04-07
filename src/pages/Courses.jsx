@@ -13,7 +13,7 @@ const Courses = () => {
   const { courses, isLoading } = useSelector((state) => state.courses)
   const { role, user } = useSelector((state) => state.auth)
 
-  const [selectedCourse, setSelectedCourse] = useState(null) // controls popup
+  const [selectedCourse, setSelectedCourse] = useState(null) 
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', cnic: '' })
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)

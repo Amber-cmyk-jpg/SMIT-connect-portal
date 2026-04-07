@@ -69,16 +69,41 @@ insert into storage.buckets (id, name, public) values ('leaves-images', 'Leaves 
 create policy "Public leaves images" on storage.objects
   for select using (bucket_id = 'leaves-images');
 
+-- Applications for Courses (Enrollments)
+create table if not exists public.applications (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references public.profiles(id) on delete cascade,
+  course_id uuid references public.courses(id) on delete cascade,
+  name text not null,
+  email text not null,
+  phone text not null,
+  cnic text not null,
+  status text check (status in ('pending', 'approved', 'rejected')) default 'pending',
+  created_at timestamptz default now()
+);
+
+alter table public.applications enable row level security;
+
+-- Student own applications
+create policy student_applications on public.applications 
+  for all using (auth.uid() = user_id);
+
+-- Admin all applications
+create policy admin_applications on public.applications 
+  for all using (exists (select 1 from public.profiles where id = auth.uid() and role = 'admin'));
+
+-- Sample data for Courses
+insert into public.courses (name, description, status) values 
+('Web & Mobile Development', 'Master full-stack development with MERN stack', 'open'),
+('Graphic Design', 'Learn digital arts and UI/UX fundamentals', 'open'),
+('AI & Machine Learning', 'Enter the world of data science and neural networks', 'open'),
+('Video Editing', 'High-quality video production and motion graphics', 'open');
+
 -- Indexes
 create index on public.profiles (role);
 create index on public.leaves (student_id, status);
-create index on public.leaves (status, created_at desc);
-
--- Sample data (add manually in dashboard after schema)
--- insert into public.courses (name, status) values 
--- ('BSCS Semester 1', 'open'),
--- ('BSSE Semester 3', 'closed'),
--- ('Diploma in IT', 'open');
+create index on public.applications (user_id, status);
+create index on public.applications (course_id);
 
 -- Enable auth.email confirm (dashboard → Auth → Settings)
 
