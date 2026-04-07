@@ -8,32 +8,39 @@ const initialState = {
   error: null,
 }
 
-// Thunks
+// ─── Thunks ───────────────────────────────────────────────
+
+// FIXED: Validates CNIC + RollNo together, then links auth user to existing profile
 export const signUp = createAsyncThunk(
   'auth/signUp',
   async ({ email, password, cnic, rollNo }, { rejectWithValue }) => {
     try {
+      // Step 1: Check if student was pre-added by admin (CNIC + Roll No must both match)
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('cnic', cnic)
+        .eq('roll_no', rollNo)
+        .is('user_id', null) // not already registered
+        .single()
+
+      if (profileError || !profile) {
+        throw new Error('Student not found. Please contact admin.')
+      }
+
+      // Step 2: Create the auth user
       const { data, error } = await supabase.auth.signUp({ email, password })
       if (error) throw error
 
-      if (data.user) {
-        // Check if student exists in profiles, create profile
-        const { data: profile, error: profileError } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('cnic', cnic)
-          .single()
+      // Step 3: Link the auth user to the existing profile row
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ user_id: data.user.id, email })
+        .eq('id', profile.id)
 
-        if (!profile) {
-          throw new Error('Student not found. Contact admin.')
-        }
+      if (updateError) throw updateError
 
-        await supabase.from('profiles').update({
-          roll_no: rollNo
-        }).eq('id', data.user.id)
-
-        return { user: data.user, role: profile.role }
-      }
+      return { user: data.user, role: profile.role ?? 'student' }
     } catch (error) {
       return rejectWithValue(error.message)
     }
@@ -47,44 +54,71 @@ export const logIn = createAsyncThunk(
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
 
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', data.user.id)
+        .eq('user_id', data.user.id) // FIXED: use user_id column, not id
         .single()
 
-      return { user: data.user, role: profile?.role }
+      if (profileError) throw new Error('Profile not found.')
+
+      return { user: data.user, role: profile.role }
     } catch (error) {
       return rejectWithValue(error.message)
     }
   }
 )
 
-export const logOut = createAsyncThunk('auth/logOut', async () => {
-  await supabase.auth.signOut()
+export const logOut = createAsyncThunk('auth/logOut', async (_, { rejectWithValue }) => {
+  try {
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
+  } catch (error) {
+    return rejectWithValue(error.message)
+  }
 })
 
 export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, { rejectWithValue }) => {
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session?.user) return null
+  try {
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session?.user) return null
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', session.user.id)
-    .single()
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', session.user.id) // FIXED: use user_id column
+      .single()
 
-  return { user: session.user, role: profile?.role }
+    return { user: session.user, role: profile?.role ?? null }
+  } catch (error) {
+    return rejectWithValue(error.message)
+  }
 })
+
+// ─── Slice ────────────────────────────────────────────────
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     clearError: (state) => { state.error = null },
+
+    // ADDED: These are used by App.jsx's onAuthStateChange listener
+    setAuth: (state, action) => {
+      state.user = action.payload.user
+      state.role = action.payload.role ?? null
+      state.isLoading = false
+    },
+    clearAuth: (state) => {
+      state.user = null
+      state.role = null
+      state.isLoading = false
+      state.error = null
+    },
   },
   extraReducers: (builder) => {
     builder
+      // signUp
       .addCase(signUp.pending, (state) => { state.isLoading = true; state.error = null })
       .addCase(signUp.fulfilled, (state, action) => {
         state.isLoading = false
@@ -95,7 +129,8 @@ const authSlice = createSlice({
         state.isLoading = false
         state.error = action.payload
       })
-      // Similar for logIn, logOut, checkAuth...
+
+      // logIn
       .addCase(logIn.pending, (state) => { state.isLoading = true; state.error = null })
       .addCase(logIn.fulfilled, (state, action) => {
         state.isLoading = false
@@ -106,17 +141,34 @@ const authSlice = createSlice({
         state.isLoading = false
         state.error = action.payload
       })
+
+      // logOut
+      .addCase(logOut.pending, (state) => { state.isLoading = true })
       .addCase(logOut.fulfilled, (state) => {
         state.user = null
         state.role = null
+        state.isLoading = false
+        state.error = null
       })
+      .addCase(logOut.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload
+      })
+
+      // checkAuth — FIXED: handles null payload + sets isLoading
+      .addCase(checkAuth.pending, (state) => { state.isLoading = true })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.user = action.payload?.user
-        state.role = action.payload?.role
+        state.isLoading = false
+        state.user = action.payload?.user ?? null
+        state.role = action.payload?.role ?? null
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.isLoading = false
+        state.user = null
+        state.role = null
       })
   },
 })
 
-export const { clearError } = authSlice.actions
+export const { clearError, setAuth, clearAuth } = authSlice.actions
 export default authSlice.reducer
-

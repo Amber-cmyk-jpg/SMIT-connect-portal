@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabaseClient';
 import { setAuth, setLoading } from '../store/slices/authSlice';
 import { Mail, Lock, LogIn, Terminal, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import logo from '../assets/saylani-logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -57,8 +58,8 @@ const Login = () => {
             </div>
             <span className="font-bold text-sm">Back to Home</span>
           </Link>
-          <div className="mb-6">
-            <img className="h-12 w-auto mx-auto" src="/src/assets/saylani-logo.png" alt="Saylani Logo" />
+          <div className="mb-6 text-center">
+            <img className="h-12 w-auto mx-auto" src={logo} alt="Saylani Logo" />
           </div>
           <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Login to Portal</h2>
           <p className="text-slate-500 font-medium text-sm mt-3 text-center">

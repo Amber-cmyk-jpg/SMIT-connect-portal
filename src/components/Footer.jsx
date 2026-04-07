@@ -1,5 +1,5 @@
-import React from 'react';
 import { Mail, Phone, MapPin, Globe, Terminal, MessageCircle, Briefcase } from 'lucide-react';
+import logo from '../assets/saylani-logo.png';
 
 const Footer = () => {
   return (
@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              <img className="h-10 w-auto" src="/src/assets/saylani-logo.png" alt="Saylani connect Logo" />
+              <img className="h-10 w-auto" src={logo} alt="Saylani connect Logo" />
               <span className="font-bold text-xl tracking-tight text-white">Connect Portal</span>
             </div>
             <p className="text-slate-400 leading-relaxed mb-8">

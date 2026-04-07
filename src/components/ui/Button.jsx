@@ -1,4 +1,4 @@
-import { cn } from '../../utils/cn' // Create later or use clsx
+import { cn } from '../../utils/cn'
 import { motion } from 'framer-motion'
 
 const Button = ({ children, variant = 'primary', size = 'md', className, ...props }) => {

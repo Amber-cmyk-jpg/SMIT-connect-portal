@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Menu, X, User, LogOut, ChevronDown, BookOpen } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient';
 import { clearAuth } from '../store/slices/authSlice';
+import logo from '../assets/saylani-logo.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +24,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-3">
-              <img className="h-10 w-auto" src="/src/assets/saylani-logo.png" alt="Saylani Logo" />
+              <img className="h-10 w-auto" src={logo} alt="Saylani Logo" />
               <span className="font-bold text-xl tracking-tight hidden md:block text-white">Connect Portal</span>
             </Link>
             <div className="hidden md:block">

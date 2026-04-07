@@ -1,25 +1,19 @@
 import Button from './ui/Button'
 import Card from './ui/Card'
 import { BookOpen, CheckCircle2, XCircle } from 'lucide-react'
-import { useDispatch } from 'react-redux'
 
-const CourseCard = ({ course }) => {
-  const dispatch = useDispatch()
+// FIXED: removed useDispatch (not needed here), accept onApply prop
+const CourseCard = ({ course, onApply }) => {
   const isOpen = course.status === 'open'
-
-  const handleApply = () => {
-    // Dispatch apply action or open modal
-    console.log('Apply for', course.name)
-  }
 
   return (
     <Card className="p-8 text-center group">
       <div className="w-20 h-20 bg-gradient-to-br from-smit-blue/20 to-smit-green/20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
         <BookOpen className="w-10 h-10 text-smit-blue" />
       </div>
-      
+
       <h3 className="text-2xl font-outfit font-bold text-smit-dark mb-4">{course.name}</h3>
-      
+
       <div className="flex items-center justify-center mb-8">
         {isOpen ? (
           <div className="flex items-center text-smit-green">
@@ -34,10 +28,10 @@ const CourseCard = ({ course }) => {
         )}
       </div>
 
-      <Button 
-        onClick={handleApply} 
+      <Button
+        onClick={onApply}      
         disabled={!isOpen}
-        size="lg" 
+        size="lg"
         className="w-full font-outfit text-lg px-8 py-4"
       >
         {isOpen ? 'Apply Now' : 'Coming Soon'}
@@ -47,4 +41,3 @@ const CourseCard = ({ course }) => {
 }
 
 export default CourseCard
-
